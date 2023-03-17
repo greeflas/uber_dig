@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/greeflas/uber_dig/handler"
 	"github.com/greeflas/uber_dig/server"
 	"go.uber.org/dig"
 	"log"
@@ -17,6 +18,16 @@ func main() {
 	err := c.Provide(func() (net.Listener, error) {
 		return server.NewTCPListener(":8080")
 	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = c.Provide(handler.NewEchoHandler)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = c.Provide(server.NewServerMux)
 	if err != nil {
 		log.Fatal(err)
 	}

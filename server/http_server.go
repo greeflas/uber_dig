@@ -12,9 +12,11 @@ type HTTPServer struct {
 	listener net.Listener
 }
 
-func NewHTTPServer(listener net.Listener) *HTTPServer {
+func NewHTTPServer(listener net.Listener, mux *http.ServeMux) *HTTPServer {
 	return &HTTPServer{
-		srv:      &http.Server{},
+		srv: &http.Server{
+			Handler: mux,
+		},
 		listener: listener,
 	}
 }
