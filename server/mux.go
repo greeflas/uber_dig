@@ -1,13 +1,21 @@
 package server
 
 import (
-	"github.com/greeflas/uber_dig/handler"
 	"net/http"
 )
 
-func NewServerMux(echo *handler.EchoHandler) *http.ServeMux {
+// Route is a http.Handler that knows the mux pattern
+// under which it will be registered.
+type Route interface {
+	http.Handler
+
+	// Pattern reports the path at which this is registered.
+	Pattern() string
+}
+
+func NewServerMux(route Route) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle("/echo", echo)
+	mux.Handle(route.Pattern(), route)
 
 	return mux
 }

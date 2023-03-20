@@ -15,3 +15,7 @@ func (h *EchoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
+
+func (h *EchoHandler) Pattern() string {
+	return "/echo"
+}

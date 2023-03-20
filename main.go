@@ -27,6 +27,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	err = c.Provide(handler.NewEchoHandler, dig.As(new(server.Route)))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	err = c.Provide(server.NewServerMux)
 	if err != nil {
 		log.Fatal(err)
