@@ -14,17 +14,23 @@ type Route interface {
 	Pattern() string
 }
 
+type RouteResult struct {
+	dig.Out
+
+	Routes []Route `group:"routes,flatten"`
+}
+
 type MuxParams struct {
 	dig.In
 
-	Route1 Route `name:"echo"`
-	Route2 Route `name:"hello"`
+	Routes []Route `group:"routes"`
 }
 
 func NewServerMux(p MuxParams) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle(p.Route1.Pattern(), p.Route1)
-	mux.Handle(p.Route2.Pattern(), p.Route2)
+	for _, route := range p.Routes {
+		mux.Handle(route.Pattern(), route)
+	}
 
 	return mux
 }

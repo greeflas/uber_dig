@@ -22,15 +22,27 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = c.Provide(handler.NewEchoHandler, dig.As(new(server.Route)), dig.Name("echo"))
+	err = c.Provide(handler.NewEchoHandler)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = c.Provide(handler.NewHelloHandler, dig.As(new(server.Route)), dig.Name("hello"))
+	err = c.Provide(handler.NewHelloHandler)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = c.Provide(func(
+		echo *handler.EchoHandler,
+		hello *handler.HelloHandler,
+	) server.RouteResult {
+		return server.RouteResult{
+			Routes: []server.Route{
+				echo,
+				hello,
+			},
+		}
+	})
 
 	err = c.Provide(server.NewServerMux)
 	if err != nil {
