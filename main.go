@@ -22,12 +22,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = c.Provide(handler.NewEchoHandler)
+	err = c.Provide(handler.NewEchoHandler, dig.As(new(server.Route)), dig.Name("echo"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = c.Provide(handler.NewEchoHandler, dig.As(new(server.Route)))
+	err = c.Provide(handler.NewHelloHandler, dig.As(new(server.Route)), dig.Name("hello"))
 	if err != nil {
 		log.Fatal(err)
 	}

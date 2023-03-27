@@ -1,6 +1,7 @@
 package server
 
 import (
+	"go.uber.org/dig"
 	"net/http"
 )
 
@@ -13,9 +14,17 @@ type Route interface {
 	Pattern() string
 }
 
-func NewServerMux(route Route) *http.ServeMux {
+type MuxParams struct {
+	dig.In
+
+	Route1 Route `name:"echo"`
+	Route2 Route `name:"hello"`
+}
+
+func NewServerMux(p MuxParams) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle(route.Pattern(), route)
+	mux.Handle(p.Route1.Pattern(), p.Route1)
+	mux.Handle(p.Route2.Pattern(), p.Route2)
 
 	return mux
 }
